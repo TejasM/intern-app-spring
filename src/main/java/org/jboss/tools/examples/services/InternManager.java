@@ -8,5 +8,4 @@ public interface InternManager {
 
 	public List<Intern> getInterns();
 	
-	public void addUser(String name, String email);
 }

@@ -147,7 +147,6 @@
 		<!-- Import the JPA API using the provided scope It is included in JBoss 
 			AS 7 / EAP 6 -->
 
-
 		<dependency>
 			<groupId>hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>

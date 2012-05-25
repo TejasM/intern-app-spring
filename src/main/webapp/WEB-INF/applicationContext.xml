@@ -3,7 +3,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
            http://www.springframework.org/schema/beans/spring-beans.xsd
            http://www.springframework.org/schema/aop 
@@ -11,32 +11,34 @@
                       http://www.springframework.org/schema/jdbc
            http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
            http://www.springframework.org/schema/tx 
-           http://www.springframework.org/schema/tx/spring-tx.xsd">
+           http://www.springframework.org/schema/tx/spring-tx.xsd
+           http://www.springframework.org/schema/jee 
+		   http://www.springframework.org/schema/jee/spring-jee.xsd
+		   http://www.springframework.org/schema/context
+		   http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<!-- the parent application context definition for the springapp application -->
 
-	<!-- <bean id="productManager" class="org.jboss.tools.examples.service.SimpleProductManager"> 
-		<property name="productDao" ref="productDao"/> </bean> -->
-	<!-- <tx:annotation-driven transaction-manager="transactionManager" /> -->
-	
-	
-	
-	<!-- Not sure how to autowire the datasource property -->
-	<bean id="productDao" class="org.jboss.tools.examples.repository.JdbcInternDao">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
-	
-    
-	<!-- I don't know how to annotate the DataSourceTransactionManager, may 
-		be create a class that extends DataSourceTransactionManager but then back 
-		to same problem as above -->
-	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
+    <jee:jndi-lookup jndi-name="java:jboss/intern-app/persistence"
+		id="entityManagerFactory" expected-type="javax.persistence.EntityManagerFactory" />
+
+
+	<bean id="entityManager"
+		class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
-	<jdbc:embedded-database id="dataSource" type="HSQL">
-		<jdbc:script location="classpath:init-db.sql" />
-	</jdbc:embedded-database>
+	<jee:jndi-lookup jndi-name="java:jboss/datasources/InternAppDS"
+		id="dataSource" expected-type="javax.sql.DataSource" />
+
+	<tx:jta-transaction-manager />
+
+	
+
+	<context:component-scan base-package="org.jboss.tools.examples.**" />
+	<context:component-scan base-package="org.jboss.tools.examples.repository"/>
+	<tx:annotation-driven />
 
 </beans>
+
+

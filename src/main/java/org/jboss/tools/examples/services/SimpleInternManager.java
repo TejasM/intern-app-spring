@@ -6,8 +6,10 @@ import org.jboss.tools.examples.domain.Intern;
 import org.jboss.tools.examples.repository.InternDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
+@Transactional
 public class SimpleInternManager implements InternManager {
 
 	@Autowired
@@ -29,14 +31,6 @@ public class SimpleInternManager implements InternManager {
 	public void setInternDao(InternDao internDao) {
 		this.internDao = internDao;
 	}
-
-
-	@Override
-	public void addUser(String name, String email) {
-		// TODO Auto-generated method stub
-		this.internDao.addIntern(name, email);
-	}
-
 
 
 }
