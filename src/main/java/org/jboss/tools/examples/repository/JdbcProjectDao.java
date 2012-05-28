@@ -13,11 +13,13 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.tools.examples.domain.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @Repository
 @Transactional
+@Service
 public class JdbcProjectDao implements ProjectDao {
 
 	@Autowired
